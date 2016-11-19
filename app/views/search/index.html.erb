@@ -1,0 +1,15 @@
+
+<div class="container">
+    <div class="header"><h1 style="text-align:center"></h1><p style="text-align:right"><%= @sorted.keys.count %> Risultati</p></div>
+<% @sorted.keys.each do |key| %>
+
+<div class="row well">
+    <div class="col-sm-4"><%= image_tag @sorted[key].second %> </div>
+    <div class="col-sm-8">
+        <h2><%= link_to @sorted[key].last, key %></h2>
+        <h3><%= @sorted[key].first %></h3>
+        
+    </div>
+</div>
+<% end %>
+</div>
