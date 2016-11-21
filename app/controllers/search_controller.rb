@@ -6,7 +6,11 @@ class SearchController < ApplicationController
         # Questa è la versione ordinata per prezzo
         #subito = "http://www.subito.it/annunci-lazio/affitto/camere-posti-letto/roma/roma/?roomtype=1&ps=2&pe=3&sp=1"
         subito = "http://www.subito.it/annunci-lazio/affitto/camere-posti-letto/roma/roma/?roomtype=1&sp=0&ps=2&pe=3"
+        subito2 = "http://www.subito.it/annunci-lazio/affitto/camere-posti-letto/roma/roma/?roomtype=1&sp=0&ps=2&pe=3&o=2"
+        subito3 = "http://www.subito.it/annunci-lazio/affitto/camere-posti-letto/roma/roma/?roomtype=1&sp=0&o=3&ps=2&pe=3"
         bakeca = "http://roma.bakeca.it/annunci/offro-camera/luogo/Roma/affittocamera/200-300/inserzionistacase/privato/nope/true/"
+        bakeca2 = "http://roma.bakeca.it/annunci/offro-camera/luogo/Roma/affittocamera/200-300/inserzionistacase/privato/page/2/nope/true/"
+        bakeca3 = "http://roma.bakeca.it/annunci/offro-camera/luogo/Roma/affittocamera/200-300/inserzionistacase/privato/page/3/nope/true/"
         #immobiliare = "http://www.immobiliare.it/stanze/Roma/camere-posti_letto-Roma.html?criterio=prezzo&ordine=asc&prezzoMassimo=300&idMZona[]=10144&idMZona[]=10145&idMZona[]=10146&idMZona[]=10147&idMZona[]=10148&idMZona[]=10149&idMZona[]=10150&idMZona[]=10151&idMZona[]=10152&idMZona[]=10153&idMZona[]=10154&idMZona[]=10155&idMZona[]=10156&idMZona[]=10163&idMZona[]=10170"
         immobiliare = "http://www.immobiliare.it/stanze/Roma/camere-posti_letto-Roma.html?criterio=dataModifica&ordine=desc&prezzoMassimo=300&idMZona[]=10144&idMZona[]=10145&idMZona[]=10146&idMZona[]=10147&idMZona[]=10148&idMZona[]=10149&idMZona[]=10150&idMZona[]=10151&idMZona[]=10152&idMZona[]=10153&idMZona[]=10154&idMZona[]=10155&idMZona[]=10156&idMZona[]=10163&idMZona[]=10170"
         portaportese = "http://www.portaportese.it/rubriche/Immobiliare/Affitto_-_Subaffitto/m-pX000000300?to=ordinaADis&zoomstart=10&latstart=41.8966&lngstart=12.494"
@@ -44,10 +48,58 @@ class SearchController < ApplicationController
             end
         end
         
+        
+        subito2 = mechanize.get(subito2)
+        subito2.search('.main .items_listing').search('li').each do |item|
+            if item.search('span.item_price').text == ""
+                next
+            else
+                link = item.search('a').first['href']
+                price = item.search('span.item_price').text
+                image = item.search('img').first['src']
+                description = item.search('a').last.text.strip
+                @results[link] = [price,image,description]
+            end
+        end
+        
+        
+        subito3 = mechanize.get(subito3)
+        subito3.search('.main .items_listing').search('li').each do |item|
+            if item.search('span.item_price').text == ""
+                next
+            else
+                link = item.search('a').first['href']
+                price = item.search('span.item_price').text
+                image = item.search('img').first['src']
+                description = item.search('a').last.text.strip
+                @results[link] = [price,image,description]
+            end
+        end
+        
+        
+        
         # CERCO SU BAKECA
         
         bakeca = mechanize.get(bakeca)
         bakeca.search('.bk-annuncio-item').each do |item|
+            link = item.search('.bk-annuncio-title a').first['href']
+            description = item.search('.bk-annuncio-title').text.strip
+            price = item.search('.bk-annuncio-prezzo').text.strip
+            image = item.search('.bk-lazy').to_s[36..-3]
+            @results[link] = [price,image,description]
+        end
+        
+        bakeca2 = mechanize.get(bakeca2)
+        bakeca2.search('.bk-annuncio-item').each do |item|
+            link = item.search('.bk-annuncio-title a').first['href']
+            description = item.search('.bk-annuncio-title').text.strip
+            price = item.search('.bk-annuncio-prezzo').text.strip
+            image = item.search('.bk-lazy').to_s[36..-3]
+            @results[link] = [price,image,description]
+        end
+        
+        bakeca3 = mechanize.get(bakeca3)
+        bakeca3.search('.bk-annuncio-item').each do |item|
             link = item.search('.bk-annuncio-title a').first['href']
             description = item.search('.bk-annuncio-title').text.strip
             price = item.search('.bk-annuncio-prezzo').text.strip
