@@ -15,12 +15,17 @@ class SearchController < ApplicationController
         immobiliare = "http://www.immobiliare.it/stanze/Roma/camere-posti_letto-Roma.html?criterio=dataModifica&ordine=desc&prezzoMassimo=300&idMZona[]=10144&idMZona[]=10145&idMZona[]=10146&idMZona[]=10147&idMZona[]=10148&idMZona[]=10149&idMZona[]=10150&idMZona[]=10151&idMZona[]=10152&idMZona[]=10153&idMZona[]=10154&idMZona[]=10155&idMZona[]=10156&idMZona[]=10163&idMZona[]=10170"
         portaportese = "http://www.portaportese.it/rubriche/Immobiliare/Affitto_-_Subaffitto/m-pX000000300?to=ordinaADis&zoomstart=10&latstart=41.8966&lngstart=12.494"
         #result = Net::HTTP.get(URI.parse(subito))
-        trovit = "http://case.trovit.it/index.php/cod.search_adwords_homes/ppc_landing_type.2/type.5/what_d.singola%20roma/sug.0/tracking.%7B%22a%22:5601363252,%20%22k%22:0,%20%22dsa%22:true%7D/isUserSearch.1/origin.11/order_by.source_date/city.Roma/price_min.200/price_max.300/date_from.7/"
+        #trovit = "http://case.trovit.it/index.php/cod.search_adwords_homes/ppc_landing_type.2/type.5/what_d.singola%20roma/sug.0/tracking.%7B%22a%22:5601363252,%20%22k%22:0,%20%22dsa%22:true%7D/isUserSearch.1/origin.11/order_by.source_date/city.Roma/price_min.200/price_max.300/date_from.7/"
+        trovit = "http://case.trovit.it/index.php/cod.search_homes/type.5/what_d.roma/sug.0/isUserSearch.1/origin.11/order_by.source_date/price_min.200/price_max.300/date_from.7/"
+        trovit2 = "http://case.trovit.it/index.php/cod.search_homes/type.5/what_d.roma/origin.11/price_min.200/price_max.300/rooms_min.0/bathrooms_min.0/date_from.7/order_by.source_date/resultsPerPage.15/isUserSearch.1/page.2"
+        trovit3 = "http://case.trovit.it/index.php/cod.search_homes/type.5/what_d.roma/origin.11/price_min.200/price_max.300/rooms_min.0/bathrooms_min.0/date_from.7/order_by.source_date/resultsPerPage.15/isUserSearch.1/page.3"
+        trovit4 = "http://case.trovit.it/index.php/cod.search_homes/type.5/what_d.roma/origin.11/price_min.200/price_max.300/rooms_min.0/bathrooms_min.0/date_from.7/order_by.source_date/resultsPerPage.15/isUserSearch.1/page.4"
+        trovit5 = "http://case.trovit.it/index.php/cod.search_homes/type.5/what_d.roma/origin.11/price_min.200/price_max.300/rooms_min.0/bathrooms_min.0/date_from.7/order_by.source_date/resultsPerPage.15/isUserSearch.1/page.5"
         
         idealista = "https://www.idealista.it/affitto-stanze/roma-roma/con-prezzo_300,prezzo-min_200,sesso_ragazza,pubblicato_ultimo-mese/?ordine=pubblicazione-desc"
         
         easystanza = "http://www.easystanza.it/search/rooms?rmin=200&rmax=300&bed=0&pic=0&doub=0&furn=0&shor=0&amin=18&amax=99&gen=2&occ=1&pag=1&srt=3&rad=5000&lat=41.9027835&lng=12.4963655"
-        
+        easystanza2 = "http://www.easystanza.it/search/rooms?rmin=200&rmax=300&bed=0&pic=0&doub=0&furn=0&shor=0&amin=18&amax=99&gen=2&occ=1&pag=2&srt=3&rad=5000&lat=41.9027835&lng=12.4963655"
         stanzaroma = "http://www.stanzaroma.com/stanze/?PREZZO=300&ORIGINE=index"
         
         
@@ -137,7 +142,55 @@ class SearchController < ApplicationController
         # CERCO SU TROVIT
         
         trovit = mechanize.get(trovit)
-        trovit.search('.list li').each do |item|
+        trovit.search('.item_v5').each do |item|
+            link = item.search('a.js-item-title').first['href']
+            description = item.search('a.js-item-title').first['title']
+            if (item.search('.lazyImage').first != nil)
+                image = "http://"+item.search('.lazyImage').first['data-src'][2..-1]
+            end
+            price = item.search('span.amount').text
+            
+            
+            @results[link] = [price,image,description]
+            
+        end
+        
+    
+        trovit2 = mechanize.get(trovit2)
+        trovit2.search('.item_v5').each do |item|
+            link = item.search('a.js-item-title').first['href']
+            description = item.search('a.js-item-title').first['title']
+            if (item.search('.lazyImage').first != nil)
+                image = "http://"+item.search('.lazyImage').first['data-src'][2..-1]
+            end
+            price = item.search('span.amount').text
+            @results[link] = [price,image,description]
+        end
+        
+        trovit3 = mechanize.get(trovit3)
+        trovit3.search('.item_v5').each do |item|
+            link = item.search('a.js-item-title').first['href']
+            description = item.search('a.js-item-title').first['title']
+            if (item.search('.lazyImage').first != nil)
+                image = "http://"+item.search('.lazyImage').first['data-src'][2..-1]
+            end
+            price = item.search('span.amount').text
+            @results[link] = [price,image,description]
+        end
+        
+        trovit4 = mechanize.get(trovit4)
+        trovit4.search('.item_v5').each do |item|
+            link = item.search('a.js-item-title').first['href']
+            description = item.search('a.js-item-title').first['title']
+            if (item.search('.lazyImage').first != nil)
+                image = "http://"+item.search('.lazyImage').first['data-src'][2..-1]
+            end
+            price = item.search('span.amount').text
+            @results[link] = [price,image,description]
+        end
+        
+        trovit5 = mechanize.get(trovit5)
+        trovit5.search('.item_v5').each do |item|
             link = item.search('a.js-item-title').first['href']
             description = item.search('a.js-item-title').first['title']
             if (item.search('.lazyImage').first != nil)
