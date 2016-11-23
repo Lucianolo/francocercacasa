@@ -1,15 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Workspace</title>
+  <title>FrancoCercaCasa</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 </head>
 <body>
+  <div id="loading">
+      <p><%= image_tag("5.gif") %> Please Wait</p>
+    </div>
+  <div class="container" id="main">
+    
+    
+    <%= yield %>
+  </div>
 
-<%= yield %>
 
+<script>
+$(window).load(function() {
+    $("#main").fadeIn("slow");
+    $("#loading").fadeOut("slow");
+});
+</script>
 </body>
+
+<script>
+  $(document).ajaxStart(function(){
+    $('#loading').show();
+   }).ajaxStop(function(){
+      $('#loading').hide();
+   });
+</script>
 </html>

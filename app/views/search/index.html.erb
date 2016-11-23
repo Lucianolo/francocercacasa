@@ -1,13 +1,20 @@
 
-<div class="container">
+<div class="container main">
     <div class="header"><h1 style="text-align:center"></h1><p style="text-align:right"><%= @sorted.keys.count %> Risultati</p></div>
 <% @sorted.keys.each do |key| %>
 
 <div class="row well">
-    <div class="col-sm-4"><%= image_tag @sorted[key].second %> </div>
+    <div class="col-sm-4 thumb">
+        <%= puts @sorted[key].second %>
+        <% if @sorted[key].second.to_s == "" %>
+            <%= image_tag("nofoto.png" , :style => "width:220px ; height:200px;") %> 
+        <% else %>
+            <%= image_tag(@sorted[key].second  , :style => "width:220px ; height:200px;") %> 
+        <% end %>
+    </div>
     <div class="col-sm-8">
         <h2><%= link_to @sorted[key].last, key %></h2>
-        <h3><%= @sorted[key].first %></h3>
+        <h3>Prezzo: <%= @sorted[key].first %> €</h3>
         
     </div>
 </div>

@@ -1,5 +1,6 @@
 require 'net/http'
 require 'mechanize'
+require 'thread'
 class SearchController < ApplicationController
     def index
         
@@ -35,7 +36,26 @@ class SearchController < ApplicationController
         #@lista = doc.css('div.heat a').map { |link| link['href'] }
         mechanize = Mechanize.new
         
-        subito = mechanize.get(subito)
+        
+        threads = []
+        threads << Thread.new { subito = mechanize.get(subito) }
+        threads << Thread.new { subito2 = mechanize.get(subito2) }
+        threads << Thread.new { subito3 = mechanize.get(subito3) }
+        threads << Thread.new { bakeca = mechanize.get(bakeca) }
+        threads << Thread.new { bakeca2 = mechanize.get(bakeca2) }
+        threads << Thread.new { bakeca3 = mechanize.get(bakeca3) }
+        threads << Thread.new { subito3 = mechanize.get(subito3) }
+        threads << Thread.new { immobiliare = mechanize.get(immobiliare) }
+        threads << Thread.new { portaportese = mechanize.get(portaportese) }
+        threads << Thread.new { trovit = mechanize.get(trovit) }
+        threads << Thread.new { trovit2 = mechanize.get(trovit2) }
+        threads << Thread.new { trovit3 = mechanize.get(trovit3) }
+        threads << Thread.new { trovit4 = mechanize.get(trovit4) }
+        threads << Thread.new { trovit5 = mechanize.get(trovit5) }
+        threads << Thread.new { idealista = mechanize.get(idealista) }
+        threads << Thread.new { stanzaroma = mechanize.get(stanzaroma) }
+        threads.each(&:join) 
+        
         
         @results = {}
         
@@ -54,7 +74,7 @@ class SearchController < ApplicationController
         end
         
         
-        subito2 = mechanize.get(subito2)
+        
         subito2.search('.main .items_listing').search('li').each do |item|
             if item.search('span.item_price').text == ""
                 next
@@ -68,7 +88,7 @@ class SearchController < ApplicationController
         end
         
         
-        subito3 = mechanize.get(subito3)
+        
         subito3.search('.main .items_listing').search('li').each do |item|
             if item.search('span.item_price').text == ""
                 next
@@ -85,7 +105,7 @@ class SearchController < ApplicationController
         
         # CERCO SU BAKECA
         
-        bakeca = mechanize.get(bakeca)
+        
         bakeca.search('.bk-annuncio-item').each do |item|
             link = item.search('.bk-annuncio-title a').first['href']
             description = item.search('.bk-annuncio-title').text.strip
@@ -94,7 +114,7 @@ class SearchController < ApplicationController
             @results[link] = [price,image,description]
         end
         
-        bakeca2 = mechanize.get(bakeca2)
+        
         bakeca2.search('.bk-annuncio-item').each do |item|
             link = item.search('.bk-annuncio-title a').first['href']
             description = item.search('.bk-annuncio-title').text.strip
@@ -103,7 +123,6 @@ class SearchController < ApplicationController
             @results[link] = [price,image,description]
         end
         
-        bakeca3 = mechanize.get(bakeca3)
         bakeca3.search('.bk-annuncio-item').each do |item|
             link = item.search('.bk-annuncio-title a').first['href']
             description = item.search('.bk-annuncio-title').text.strip
@@ -114,7 +133,7 @@ class SearchController < ApplicationController
         
         # CERCO SU IMMOBILIARE
         
-        immobiliare = mechanize.get(immobiliare)
+        
         immobiliare.search('.wrapper_riga_annuncio').search('.content').each do |item|
             link = item.search('.annuncio_title a').first['href']
             description = item.search('.annuncio_title a').text.strip
@@ -125,7 +144,7 @@ class SearchController < ApplicationController
             
         # CERCO SU PORTAPORTESE
         
-        portaportese = mechanize.get(portaportese)
+        
         portaportese.search('.ris-body').each do |item|
             link = "http://www.portaportese.it"+item.search('.ris-title a').first['href']
             description = item.search('.ris-title a').first['title']
@@ -141,7 +160,7 @@ class SearchController < ApplicationController
         
         # CERCO SU TROVIT
         
-        trovit = mechanize.get(trovit)
+        
         trovit.search('.item_v5').each do |item|
             link = item.search('a.js-item-title').first['href']
             description = item.search('a.js-item-title').first['title']
@@ -156,7 +175,7 @@ class SearchController < ApplicationController
         end
         
     
-        trovit2 = mechanize.get(trovit2)
+        
         trovit2.search('.item_v5').each do |item|
             link = item.search('a.js-item-title').first['href']
             description = item.search('a.js-item-title').first['title']
@@ -167,7 +186,7 @@ class SearchController < ApplicationController
             @results[link] = [price,image,description]
         end
         
-        trovit3 = mechanize.get(trovit3)
+        
         trovit3.search('.item_v5').each do |item|
             link = item.search('a.js-item-title').first['href']
             description = item.search('a.js-item-title').first['title']
@@ -177,8 +196,7 @@ class SearchController < ApplicationController
             price = item.search('span.amount').text
             @results[link] = [price,image,description]
         end
-        
-        trovit4 = mechanize.get(trovit4)
+
         trovit4.search('.item_v5').each do |item|
             link = item.search('a.js-item-title').first['href']
             description = item.search('a.js-item-title').first['title']
@@ -189,7 +207,6 @@ class SearchController < ApplicationController
             @results[link] = [price,image,description]
         end
         
-        trovit5 = mechanize.get(trovit5)
         trovit5.search('.item_v5').each do |item|
             link = item.search('a.js-item-title').first['href']
             description = item.search('a.js-item-title').first['title']
@@ -202,7 +219,7 @@ class SearchController < ApplicationController
         
         # CERCO SU IDEALISTA
         
-        idealista = mechanize.get(idealista)
+        
         idealista.search('.item').each do |item|
             link = "https://www.idealista.it"+item.search('.item-link').first['href']
             description = item.search('.item-link').text
@@ -215,7 +232,7 @@ class SearchController < ApplicationController
         
         # CERCO SU STANZAROMA
         
-        stanzaroma = mechanize.get(stanzaroma)
+        
         stanzaroma.search('.TR').each do |item|
             # Evito le righe vuote (Sul sito sono presenti righe vuote nella tabella in cui è inserito del testo commentato "<!--")
             next if (item.search('.TD').text[0] == "<")
