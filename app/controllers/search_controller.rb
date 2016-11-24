@@ -12,11 +12,8 @@ class SearchController < ApplicationController
         bakeca = "http://roma.bakeca.it/annunci/offro-camera/luogo/Roma/affittocamera/200-300/inserzionistacase/privato/nope/true/"
         bakeca2 = "http://roma.bakeca.it/annunci/offro-camera/luogo/Roma/affittocamera/200-300/inserzionistacase/privato/page/2/nope/true/"
         bakeca3 = "http://roma.bakeca.it/annunci/offro-camera/luogo/Roma/affittocamera/200-300/inserzionistacase/privato/page/3/nope/true/"
-        #immobiliare = "http://www.immobiliare.it/stanze/Roma/camere-posti_letto-Roma.html?criterio=prezzo&ordine=asc&prezzoMassimo=300&idMZona[]=10144&idMZona[]=10145&idMZona[]=10146&idMZona[]=10147&idMZona[]=10148&idMZona[]=10149&idMZona[]=10150&idMZona[]=10151&idMZona[]=10152&idMZona[]=10153&idMZona[]=10154&idMZona[]=10155&idMZona[]=10156&idMZona[]=10163&idMZona[]=10170"
         immobiliare = "http://www.immobiliare.it/stanze/Roma/camere-posti_letto-Roma.html?criterio=dataModifica&ordine=desc&prezzoMassimo=300&idMZona[]=10144&idMZona[]=10145&idMZona[]=10146&idMZona[]=10147&idMZona[]=10148&idMZona[]=10149&idMZona[]=10150&idMZona[]=10151&idMZona[]=10152&idMZona[]=10153&idMZona[]=10154&idMZona[]=10155&idMZona[]=10156&idMZona[]=10163&idMZona[]=10170"
         portaportese = "http://www.portaportese.it/rubriche/Immobiliare/Affitto_-_Subaffitto/m-pX000000300?to=ordinaADis&zoomstart=10&latstart=41.8966&lngstart=12.494"
-        #result = Net::HTTP.get(URI.parse(subito))
-        #trovit = "http://case.trovit.it/index.php/cod.search_adwords_homes/ppc_landing_type.2/type.5/what_d.singola%20roma/sug.0/tracking.%7B%22a%22:5601363252,%20%22k%22:0,%20%22dsa%22:true%7D/isUserSearch.1/origin.11/order_by.source_date/city.Roma/price_min.200/price_max.300/date_from.7/"
         trovit = "http://case.trovit.it/index.php/cod.search_homes/type.5/what_d.roma/sug.0/isUserSearch.1/origin.11/order_by.source_date/price_min.200/price_max.300/date_from.7/"
         trovit2 = "http://case.trovit.it/index.php/cod.search_homes/type.5/what_d.roma/origin.11/price_min.200/price_max.300/rooms_min.0/bathrooms_min.0/date_from.7/order_by.source_date/resultsPerPage.15/isUserSearch.1/page.2"
         trovit3 = "http://case.trovit.it/index.php/cod.search_homes/type.5/what_d.roma/origin.11/price_min.200/price_max.300/rooms_min.0/bathrooms_min.0/date_from.7/order_by.source_date/resultsPerPage.15/isUserSearch.1/page.3"
@@ -25,8 +22,6 @@ class SearchController < ApplicationController
         
         idealista = "https://www.idealista.it/affitto-stanze/roma-roma/con-prezzo_300,prezzo-min_200,sesso_ragazza,pubblicato_ultimo-mese/?ordine=pubblicazione-desc"
         
-        easystanza = "http://www.easystanza.it/search/rooms?rmin=200&rmax=300&bed=0&pic=0&doub=0&furn=0&shor=0&amin=18&amax=99&gen=2&occ=1&pag=1&srt=3&rad=5000&lat=41.9027835&lng=12.4963655"
-        easystanza2 = "http://www.easystanza.it/search/rooms?rmin=200&rmax=300&bed=0&pic=0&doub=0&furn=0&shor=0&amin=18&amax=99&gen=2&occ=1&pag=2&srt=3&rad=5000&lat=41.9027835&lng=12.4963655"
         stanzaroma = "http://www.stanzaroma.com/stanze/?PREZZO=300&ORIGINE=index"
         
         
@@ -246,26 +241,7 @@ class SearchController < ApplicationController
             price = item.search('td.TD')[3].text
             @results[link] = [price,image,description]
         end
-        
-        # CERCO SU EASYSTANZA  -- -- -- SEMBRA CI SIANO DEI FILTRI E LA PAGINA NON VIENE ANALIZZATA COME PREVISTO
-=begin        
-        easystanza = mechanize.get(easystanza)
-        puts easystanza.search('div.page-container') #.search('ul.search-results').search('.listing__row')
-        easystanza.search('div.listing-meta').each do |item|
-            link = "https://www.easystanza.it"+item.search('.listing-meta__link').first['href']
-            description = item.search('.listing-meta__link').first['title']
-            if (item.search('.listing-img__img').first != nil)
-                image = item.search('.listing-img__img').first['src']
-            end
-            price = item.search('span.listing-img__price').text
-            puts link
-            puts description
-            puts image
-            puts price
-            puts item
-            #@results[link] = [price,image,description]
-        end
-=end        
+     
         # DATO CHE IL CAMPO "PRICE" CONTIENE TESTO OLTRE ALLA CIFRA, CERCO IL VALORE ESATTO PER POTER POI ORDINARE PER PREZZO
         
         @results.each do |k,v|
